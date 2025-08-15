@@ -21,7 +21,7 @@ public class AttachmentsAPIClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+		/*ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
 			MyAttachments.testingSynced.requestFromServer(entity);
 		});
 		UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
@@ -30,7 +30,7 @@ public class AttachmentsAPIClient implements ClientModInitializer {
 				return ActionResult.PASS;
 			}
 			return ActionResult.FAIL;
-		});
+		});*/
 		ClientPacketHandler.init();
 	}
 }
