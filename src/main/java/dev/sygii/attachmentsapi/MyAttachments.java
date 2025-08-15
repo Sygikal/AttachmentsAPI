@@ -13,7 +13,7 @@ import net.minecraft.network.PacketByteBuf;
 
 public class MyAttachments implements AttachmentInitializer {
     //public static Attachment<Boolean> testing;
-    public static SyncedAttachment<String> testingSynced;
+    //public static SyncedAttachment<String> testingSynced;
 
     @Override
     public void declareAttachments(AttachmentDeclarer declarer) {
