@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "dev.sygii.attachmentsapi.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "dev.sygii.attachmentsapi.mixin.AttachmentsAPIPlugin",
+  "mixins": [
+    "entity.EntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+  ]
+}
