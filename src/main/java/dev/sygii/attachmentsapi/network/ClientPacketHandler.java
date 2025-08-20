@@ -16,7 +16,7 @@ public class ClientPacketHandler {
         ClientPlayNetworking.registerGlobalReceiver(S2CUpdateEntityAttachmentPacket.PACKET_ID, ((client, handler, buf, sender) -> {
             int entityId = buf.readInt();
             String id = buf.readString();
-            Object asd = AttachmentManager.READERS.get(id).run(buf);
+            Object asd = AttachmentManager.READERS.get(id).run(buf, entityId);
             client.execute(() -> {
                 if (client.world != null) {
                     Entity entity = client.world.getEntityById(entityId);

@@ -64,7 +64,7 @@ public class SyncedAttachment<V> {
     }
 
     public interface Reader<T> {
-        T run(PacketByteBuf buf);
+        T run(PacketByteBuf buf, Object instance);
     }
 
     public interface NBTWriter<T> {
@@ -72,7 +72,7 @@ public class SyncedAttachment<V> {
     }
 
     public interface NBTReader<T> {
-        T run(NbtCompound nbt);
+        T run(NbtCompound nbt, Object instance);
     }
 
     public AttachmentIdentifier getId() {

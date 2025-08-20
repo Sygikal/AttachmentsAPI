@@ -17,7 +17,7 @@ public class ServerPacketHandler {
         ServerPlayNetworking.registerGlobalReceiver(C2SUpdateEntityAttachmentPacket.PACKET_ID, (server, player, handler, buf, responseSender) -> {
             UUID entityId = buf.readUuid();
             String id = buf.readString();
-            Object asd = AttachmentManager.READERS.get(id).run(buf);
+            Object asd = AttachmentManager.READERS.get(id).run(buf, entityId);
             server.execute(() -> {
                 for (ServerWorld serverWorld : server.getWorlds()) {
                     Entity entity = serverWorld.getEntity(entityId);

@@ -55,7 +55,7 @@ public class EntityMixin {
                     //System.out.println(comp);
                     /*System.out.println(attachments);
                     System.out.println(list.getString(0));*/
-                    AttachmentManager.SYNCED_ACCESSORS.get(entry.getKey()).set(entity, entry.getValue().run(comp));
+                    AttachmentManager.SYNCED_ACCESSORS.get(entry.getKey()).set(entity, entry.getValue().run(comp, entity));
                 }
             }
         }
