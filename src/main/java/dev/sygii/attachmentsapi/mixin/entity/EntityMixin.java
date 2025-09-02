@@ -5,6 +5,7 @@ import dev.sygii.attachmentsapi.attachment.synced.SyncedAttachment;
 import dev.sygii.attachmentsapi.registry.AttachmentManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,12 +14,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 
+@Debug(export = true)
 @Mixin(Entity.class)
 public class EntityMixin {
 
     Entity entity = ((Entity)(Object)this);
 
-    @Inject(method = "writeNbt", at = @At("RETURN"))
+    @Inject(method = "writeNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;writeCustomDataToNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
     protected void writeAttachmentNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         //NbtList nbtList = new NbtList();
         NbtCompound attachments = new NbtCompound();
@@ -43,7 +45,7 @@ public class EntityMixin {
         //System.out.println(nbt.toString());
     }
 
-    @Inject(method = "readNbt", at = @At("RETURN"))
+    @Inject(method = "readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;readCustomDataFromNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
     protected void onReadCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
         if (nbt.contains(AttachmentsAPI.ATTACHMENT_NBT_KEY)) {
             NbtCompound attachments = nbt.getCompound(AttachmentsAPI.ATTACHMENT_NBT_KEY);
@@ -55,7 +57,8 @@ public class EntityMixin {
                     //System.out.println(comp);
                     /*System.out.println(attachments);
                     System.out.println(list.getString(0));*/
-                    AttachmentManager.SYNCED_ACCESSORS.get(entry.getKey()).set(entity, entry.getValue().run(comp, entity));
+                    Object current = AttachmentManager.SYNCED_ACCESSORS.get(entry.getKey()).get(entity);
+                    AttachmentManager.SYNCED_ACCESSORS.get(entry.getKey()).set(entity, entry.getValue().run(comp, current));
                 }
             }
         }
