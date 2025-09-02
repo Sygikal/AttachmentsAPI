@@ -1,5 +1,6 @@
 package dev.sygii.attachmentsapi.network;
 
+import dev.sygii.attachmentsapi.attachment.synced.SyncedAttachment;
 import dev.sygii.attachmentsapi.network.packet.C2SRequestEntityAttachmentPacket;
 import dev.sygii.attachmentsapi.network.packet.C2SUpdateEntityAttachmentPacket;
 import dev.sygii.attachmentsapi.network.packet.S2CUpdateEntityAttachmentPacket;
@@ -17,12 +18,17 @@ public class ServerPacketHandler {
         ServerPlayNetworking.registerGlobalReceiver(C2SUpdateEntityAttachmentPacket.PACKET_ID, (server, player, handler, buf, responseSender) -> {
             UUID entityId = buf.readUuid();
             String id = buf.readString();
-            Object asd = AttachmentManager.READERS.get(id).run(buf, entityId);
+            SyncedAttachment.ContextRunner runner = AttachmentManager.READERS.get(id).run(SyncedAttachment.Context.SERVER, buf);
+
+
+            //Object asd = AttachmentManager.READERS.get(id).readServer(buf);
             server.execute(() -> {
                 for (ServerWorld serverWorld : server.getWorlds()) {
                     Entity entity = serverWorld.getEntity(entityId);
                     if (entity != null && Objects.equals(entity.getClass(), AttachmentManager.SYNCED_ACCESSORS.get(id).getTarget())) {
-                        AttachmentManager.SYNCED_ACCESSORS.get(id).set(entity, asd);
+                        Object returnedObj = runner.run(SyncedAttachment.Context.SERVER, AttachmentManager.SYNCED_ACCESSORS.get(id).get(entity));
+
+                        AttachmentManager.SYNCED_ACCESSORS.get(id).set(entity, returnedObj);
                     }
                 }
             });

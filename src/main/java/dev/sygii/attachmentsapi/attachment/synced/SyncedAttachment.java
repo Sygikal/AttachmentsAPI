@@ -1,6 +1,8 @@
 package dev.sygii.attachmentsapi.attachment.synced;
 
 import dev.sygii.attachmentsapi.attachment.AttachmentIdentifier;
+import dev.sygii.attachmentsapi.network.ClientPacketHandler;
+import dev.sygii.attachmentsapi.network.ServerPacketHandler;
 import dev.sygii.attachmentsapi.network.packet.C2SRequestEntityAttachmentPacket;
 import dev.sygii.attachmentsapi.network.packet.C2SUpdateEntityAttachmentPacket;
 import dev.sygii.attachmentsapi.network.packet.S2CUpdateEntityAttachmentPacket;
@@ -64,7 +66,16 @@ public class SyncedAttachment<V> {
     }
 
     public interface Reader<T> {
-        T run(PacketByteBuf buf, Object instance);
+        ContextRunner run(Context context, PacketByteBuf buf);
+    }
+
+    public interface ContextRunner<T> {
+        T run(Context context, T instance);
+    }
+
+    public enum Context {
+        CLIENT,
+        SERVER;
     }
 
     public interface NBTWriter<T> {
